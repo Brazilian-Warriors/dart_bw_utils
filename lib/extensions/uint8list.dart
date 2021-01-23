@@ -1,0 +1,30 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+extension BWExUint8List on Uint8List {
+  int _toInt32BE(int p1, int p2, int p3, int p4) {
+    return p4 + (p3 << 8) + (p2 << 16) + (p1 << 24);
+  }
+
+  int toInt32BE({
+    int offset = 0,
+  }) {
+    final arr = getRange(offset, offset + 4).toList();
+    return _toInt32BE(arr[0], arr[1], arr[2], arr[3]);
+  }
+
+  int toInt32LE({
+    int offset = 0,
+  }) {
+    final arr = getRange(offset, offset + 4).toList().reversed.toList();
+    return _toInt32BE(arr[0], arr[1], arr[2], arr[3]);
+  }
+
+  String convertToStringUTF8() {
+    return Utf8Decoder().convert(this);
+  }
+
+  List<String> toHex() {
+    return map((e) => e.toRadixString(16).padLeft(2, '0')).toList();
+  }
+}
