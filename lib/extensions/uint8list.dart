@@ -6,6 +6,29 @@ extension BWExUint8List on Uint8List {
     return p4 + (p3 << 8) + (p2 << 16) + (p1 << 24);
   }
 
+  int _toInt16BE(int p1, int p2) {
+//    return p4 + (p3 << 8) + (p2 << 16) + (p1 << 24);
+    return p2 + (p1 << 8);
+  }
+
+  int toInt8() {
+    final arr = single;
+  }
+
+  int toInt16BE({
+    int offset = 0,
+  }) {
+    final arr = getRange(offset, offset + 2).toList();
+    return _toInt16BE(arr[0], arr[1]);
+  }
+
+  int toInt16LE({
+    int offset = 0,
+  }) {
+    final arr = getRange(offset, offset + 2).toList().reversed.toList();
+    return _toInt16BE(arr[0], arr[1]);
+  }
+
   int toInt32BE({
     int offset = 0,
   }) {
