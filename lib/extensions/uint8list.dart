@@ -13,6 +13,7 @@ extension BWExUint8List on Uint8List {
 
   int toInt8() {
     final arr = single;
+    return arr;
   }
 
   int toInt16BE({
