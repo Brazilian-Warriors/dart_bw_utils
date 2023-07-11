@@ -11,7 +11,7 @@ hexDump(Uint8List data) {
 
   var header = '          ';
   for (var row = 0; row < width; row++) {
-    header += row.toHex() + ' ';
+    header += '${row.toHex()} ';
   }
   print(header);
 
@@ -25,7 +25,7 @@ hexDump(Uint8List data) {
     for (var row = 0; row < width; row++) {
       var index = (col * width) + row;
       if (index < data.length) {
-        line += (data[index].toHex() + ' ');
+        line += ('${data[index].toHex()} ');
       } else {
         line += ('   ');
       }

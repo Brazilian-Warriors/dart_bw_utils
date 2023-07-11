@@ -51,4 +51,12 @@ extension BWExUint8List on Uint8List {
   List<String> toHex() {
     return map((e) => e.toRadixString(16).padLeft(2, '0')).toList();
   }
+
+  List<int> read(int lentgth, {int startPos = 0}) {
+    final value = skip(startPos).take(lentgth).toList();
+    if (startPos > 0) {
+      startPos += lentgth;
+    }
+    return value;
+  }
 }
