@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 extension BWReadToNumber on RandomAccessFile {
   static Endian endian = Endian.big;
-  set setEndian(Endian value) => endian = value;
+  void setEndian(Endian value) => endian = value;
 
   int get readInt64 {
     return readSync(8).buffer.asByteData().getInt64(0, endian);
