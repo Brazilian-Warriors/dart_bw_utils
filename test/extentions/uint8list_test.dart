@@ -9,5 +9,8 @@ main() {
 
     var listBe = Uint8List.fromList([127, 9, 0, 0].reversed.toList());
     expect(listBe.toInt32BE(), 2431);
+
+    ByteData value = ByteData.view(list.buffer);
+    expect(value.getInt32(0, Endian.little), 2431);
   });
 }
