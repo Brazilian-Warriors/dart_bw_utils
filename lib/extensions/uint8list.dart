@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:bw_utils/bw_utils.dart';
+
 extension BWExUint8List on Uint8List {
   int _toInt32BE(int p1, int p2, int p3, int p4) {
     return p4 + (p3 << 8) + (p2 << 16) + (p1 << 24);
@@ -49,7 +51,7 @@ extension BWExUint8List on Uint8List {
   }
 
   List<String> toHex() {
-    return map((e) => e.toRadixString(16).padLeft(2, '0')).toList();
+    return map((e) => e.toHex()).toList();
   }
 
   List<int> read(int lentgth, {int startPos = 0}) {

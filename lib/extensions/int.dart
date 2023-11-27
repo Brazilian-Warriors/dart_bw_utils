@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 extension BWExInt on int {
-
   List<int> toInt32LE() {
     final num = this;
     final p1 = num & 0xFF;
@@ -22,5 +21,9 @@ extension BWExInt on int {
     final p3 = num >> 16 & 0xFF;
     final p4 = num >> 24 & 0xFF;
     return Uint8List.fromList([p4, p3, p2, p1]);
+  }
+
+  String toHex() {
+    return toRadixString(16).padLeft(2, '0');
   }
 }
