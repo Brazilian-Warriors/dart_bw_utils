@@ -1,6 +1,45 @@
 import 'dart:typed_data';
 
+import 'package:bw_utils/shared/settings.dart';
+
 extension BWExInt on int {
+  static ByteData valueOf64Bit = ByteData(8);
+  static ByteData valueOf32Bit = ByteData(4);
+  static ByteData valueOf16Bit = ByteData(2);
+  static ByteData valueOf8Bit = ByteData(1);
+
+  List<int> toUint8List() {
+    return (valueOf8Bit..setUint8(0, this)).buffer.asUint8List();
+  }
+
+  List<int> toInt8List() {
+    return (valueOf8Bit..setInt8(0, this)).buffer.asInt8List();
+  }
+
+  List<int> toUint16List() {
+    return (valueOf16Bit..setUint16(0, this, getEndian)).buffer.asUint8List();
+  }
+
+  List<int> toInt16List() {
+    return (valueOf16Bit..setInt16(0, this, getEndian)).buffer.asInt8List();
+  }
+
+  List<int> toUint32List() {
+    return (ByteData(4)..setUint32(0, this, getEndian)).buffer.asUint8List();
+  }
+
+  List<int> toInt32List() {
+    return (valueOf32Bit..setInt32(0, this, getEndian)).buffer.asInt8List();
+  }
+
+  List<int> toUint64List() {
+    return (valueOf64Bit..setUint64(0, this, getEndian)).buffer.asUint8List();
+  }
+
+  List<int> toInt64List() {
+    return (valueOf32Bit..setInt64(0, this, getEndian)).buffer.asInt8List();
+  }
+
   List<int> toInt32LE() {
     final num = this;
     final p1 = num & 0xFF;

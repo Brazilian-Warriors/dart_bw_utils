@@ -13,11 +13,6 @@ extension BWExUint8List on Uint8List {
     return p2 + (p1 << 8);
   }
 
-  int toInt8() {
-    final arr = single;
-    return arr;
-  }
-
   int toInt16BE({
     int offset = 0,
   }) {
@@ -48,6 +43,10 @@ extension BWExUint8List on Uint8List {
 
   String convertToStringUTF8() {
     return Utf8Decoder().convert(this);
+  }
+
+  String convertToStringLatin1() {
+    return Latin1Decoder().convert(this);
   }
 
   List<String> toHex() {
