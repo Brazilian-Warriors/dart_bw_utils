@@ -51,24 +51,32 @@ main() {
     setEndian(Endian.big);
 
     String path = '${Directory.current.path}/temp.dat';
+    // File(path).writeAsBytesSync([127, 9, 0, 0]);
     RandomAccessFile file = File(path).openSync();
 
-    final a = (file.readSync(4).buffer.asByteData()).getUint32(0, getEndian);
-    //final a = file.readUint32;
+    print(file.readUint32.toUint32List());
 
-    Endian end = getEndian;
+    //final int a = (file.readSync(4).buffer.asByteData()).getUint32(0, getEndian);
 
-    final b = (ByteData(4)..setUint32(0, a, end)).buffer;
+    //final b = (ByteData(4)..setInt32(0, a, getEndian)).buffer.asUint8List();
 
-    print(a);
-    print(Uint8List.view(b));
+    //print(a);
+    //print(b);
   });
 
   test('int ing Big And Litte Endian', () {
-    setEndian(Endian.little);
+    setEndian(Endian.big);
     final value = ByteData(4);
 
-    final a = (value..setUint32(0, 2431, getEndian)).buffer.asUint8List();
+    Endian end = getEndian;
+
+    final a = (value..setUint32(0, 2431, end)).buffer.asUint8List();
+
+    print(a);
+  });
+
+  test('int', () {
+    int a = 2431;
 
     print(a);
   });
