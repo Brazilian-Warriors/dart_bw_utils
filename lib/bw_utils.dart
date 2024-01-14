@@ -1,7 +1,7 @@
 library bw_utils;
 
-export 'extensions/uint8list.dart';
-export 'extensions/int.dart';
-export 'extensions/list.dart';
-export 'extensions/random_file_access.dart';
-export 'shared/settings.dart';
+export 'src/extensions/uint8list.dart';
+export 'src/extensions/int.dart';
+export 'src/extensions/list.dart';
+export 'src/extensions/random_file_access.dart';
+export 'src/shared/settings.dart';
