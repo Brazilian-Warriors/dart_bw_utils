@@ -25,4 +25,76 @@ extension BWExListInt on List<int> {
   ByteData get _byteData {
     return ByteData.sublistView(Uint8List.fromList(this));
   }
+
+  List<int> findAllPositionWhere(
+    List<int> valueToFind, {
+    bool findOnlyFirst = false,
+    int start = 0,
+    int end = 0,
+  }) {
+    return _findPositionInListWhere(valueToFind, findOnlyFirst, start, end);
+  }
+
+  int findFirstPositionWhere(
+    List<int> valueToFind, {
+    int start = 0,
+    int end = 0,
+  }) {
+    final value = _findPositionInListWhere(valueToFind, true, start, end);
+
+    return value.isEmpty ? -1 : value.first;
+  }
+
+  List<int> _findPositionInListWhere(
+    List<int> valueToFind, [
+    bool findOnlyFirst = false,
+    int start = 0,
+    int endList = 0,
+  ]) {
+    
+    if ((length == 0) || (length < valueToFind.length)) {
+      return [];
+    }
+
+    int subListLength = valueToFind.length + start;
+
+    if ((endList == 0) || (endList > length)) {
+      endList = length;
+    }
+
+    if (((endList - start) < subListLength) || (endList <= start)) {
+      endList = subListLength;
+    }
+
+    if (endList < length) {
+      endList++;
+    }
+
+    List<int> allPosition = [];
+    bool equalValue = false;
+
+    do {
+      final subList = sublist(start, subListLength);
+      equalValue = false;
+      for (var i = 0; i < subList.length; i++) {
+        equalValue = subList[i] == valueToFind[i];
+
+        if (equalValue == false) {
+          break;
+        }
+      }
+
+      if (equalValue) {
+        allPosition.add(start);
+
+        if (findOnlyFirst) {
+          break;
+        }
+      }
+
+      start++;
+      subListLength++;
+    } while (subListLength <= endList);
+    return allPosition;
+  }
 }
