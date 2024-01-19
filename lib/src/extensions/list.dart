@@ -26,37 +26,39 @@ extension BWExListInt on List<int> {
     return ByteData.sublistView(Uint8List.fromList(this));
   }
 
-  List<int> findAllPositionWhere(
+  List<int> findAllSublistPositionWhere(
     List<int> valueToFind, {
     bool findOnlyFirst = false,
     int start = 0,
     int end = 0,
   }) {
-    return _findPositionInListWhere(valueToFind, findOnlyFirst, start, end);
+    return _findPositionInListWhere(this, valueToFind, findOnlyFirst, start, end);
   }
 
-  int findFirstPositionWhere(
+  int findFirstSublistPositionWhere(
     List<int> valueToFind, {
     int start = 0,
     int end = 0,
   }) {
-    final value = _findPositionInListWhere(valueToFind, true, start, end);
+    final value = _findPositionInListWhere(this, valueToFind, true, start, end);
 
     return value.isEmpty ? -1 : value.first;
   }
 
-  List<int> _findPositionInListWhere(
+}
+
+List<int> _findPositionInListWhere(List<int> originalList,
     List<int> valueToFind, [
     bool findOnlyFirst = false,
     int start = 0,
     int endList = 0,
   ]) {
 
-    if ((length == 0) || (length < valueToFind.length)) {
+    if ((originalList.isEmpty) || (originalList.length < valueToFind.length)) {
       return [];
     }
 
-    if ((start >= length) || ((start + valueToFind.length) > length)) {
+    if ((start >= originalList.length) || ((start + valueToFind.length) > originalList.length)) {
       return [];
     }
 
@@ -66,15 +68,15 @@ extension BWExListInt on List<int> {
 
     int subListLength = valueToFind.length + start;
 
-    if ((endList == 0) || (endList > length)) {
-      endList = length;
+    if ((endList == 0) || (endList > originalList.length)) {
+      endList = originalList.length;
     }
 
     if (((endList - start) < subListLength) || (endList <= start)) {
       endList = subListLength;
     }
 
-    if (endList < length) {
+    if (endList < originalList.length) {
       endList++;
     }
 
@@ -82,7 +84,7 @@ extension BWExListInt on List<int> {
     bool equalValue = false;
 
     do {
-      final subList = sublist(start, subListLength);
+      final subList = originalList.sublist(start, subListLength);
       equalValue = false;
       for (var i = 0; i < subList.length; i++) {
         equalValue = subList[i] == valueToFind[i];
@@ -105,4 +107,3 @@ extension BWExListInt on List<int> {
     } while (subListLength <= endList);
     return position;
   }
-}
