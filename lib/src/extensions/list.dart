@@ -51,9 +51,17 @@ extension BWExListInt on List<int> {
     int start = 0,
     int endList = 0,
   ]) {
-    
+
     if ((length == 0) || (length < valueToFind.length)) {
       return [];
+    }
+
+    if ((start >= length) || ((start + valueToFind.length) > length)) {
+      return [];
+    }
+
+    if (start < 0) {
+      start = 0;
     }
 
     int subListLength = valueToFind.length + start;
@@ -70,7 +78,7 @@ extension BWExListInt on List<int> {
       endList++;
     }
 
-    List<int> allPosition = [];
+    List<int> position = [];
     bool equalValue = false;
 
     do {
@@ -85,7 +93,7 @@ extension BWExListInt on List<int> {
       }
 
       if (equalValue) {
-        allPosition.add(start);
+        position.add(start);
 
         if (findOnlyFirst) {
           break;
@@ -95,6 +103,6 @@ extension BWExListInt on List<int> {
       start++;
       subListLength++;
     } while (subListLength <= endList);
-    return allPosition;
+    return position;
   }
 }
