@@ -45,6 +45,16 @@ extension BWExListInt on List<int> {
 
     return value.isEmpty ? -1 : value.first;
   }
+
+  bool containsSublist(
+    List<int> subList, {
+    int start = 0,
+    int end = 0,
+  }) {
+    final value = _findPositionInListWhere(this, subList, true, start, end);
+
+    return value.isNotEmpty;
+  }
 }
 
 List<int> _findPositionInListWhere(
