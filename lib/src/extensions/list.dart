@@ -32,7 +32,8 @@ extension BWExListInt on List<int> {
     int start = 0,
     int end = 0,
   }) {
-    return _findPositionInListWhere(this, valueToFind, findOnlyFirst, start, end);
+    return _findPositionInListWhere(
+        this, valueToFind, findOnlyFirst, start, end);
   }
 
   int findFirstSublistPositionWhere(
@@ -44,66 +45,67 @@ extension BWExListInt on List<int> {
 
     return value.isEmpty ? -1 : value.first;
   }
-
 }
 
-List<int> _findPositionInListWhere(List<int> originalList,
-    List<int> valueToFind, [
-    bool findOnlyFirst = false,
-    int start = 0,
-    int endList = 0,
-  ]) {
+List<int> _findPositionInListWhere(
+  List<int> originalList,
+  List<int> valueToFind, [
+  bool findOnlyFirst = false,
+  int start = 0,
+  int endList = 0,
+]) {
+  if ((originalList.isEmpty) || (originalList.length < valueToFind.length)) {
+    return [];
+  }
 
-    if ((originalList.isEmpty) || (originalList.length < valueToFind.length)) {
-      return [];
-    }
+  if ((start >= originalList.length) ||
+      ((start + valueToFind.length) > originalList.length)) {
+    return [];
+  }
 
-    if ((start >= originalList.length) || ((start + valueToFind.length) > originalList.length)) {
-      return [];
-    }
+  if (start < 0) {
+    start = 0;
+  }
 
-    if (start < 0) {
-      start = 0;
-    }
+  int subListLength = valueToFind.length + start;
 
-    int subListLength = valueToFind.length + start;
+  if ((endList == 0) || (endList > originalList.length)) {
+    endList = originalList.length;
+  }
 
-    if ((endList == 0) || (endList > originalList.length)) {
-      endList = originalList.length;
-    }
+  if (((endList - start) < subListLength) || (endList <= start)) {
+    endList = subListLength;
+  }
 
-    if (((endList - start) < subListLength) || (endList <= start)) {
-      endList = subListLength;
-    }
+  if (endList < originalList.length) {
+    endList++;
+  }
 
-    if (endList < originalList.length) {
-      endList++;
-    }
+  List<int> position = [];
+  bool equalValue = false;
 
-    List<int> position = [];
-    bool equalValue = false;
-
-    do {
-      final subList = originalList.sublist(start, subListLength);
-      equalValue = false;
-      for (var i = 0; i < subList.length; i++) {
-        equalValue = subList[i] == valueToFind[i];
-
-        if (equalValue == false) {
-          break;
-        }
-      }
-
-      if (equalValue) {
-        position.add(start);
-
-        if (findOnlyFirst) {
-          break;
-        }
-      }
+  do {
+    final subList = originalList.sublist(start, subListLength);
+    equalValue = false;
+    final int startPos = start;
+    for (var i = 0; i < subList.length; i++) {
+      equalValue = subList[i] == valueToFind[i];
 
       start++;
       subListLength++;
-    } while (subListLength <= endList);
-    return position;
-  }
+
+      if (equalValue == false) {
+        break;
+      }
+    }
+
+    if (equalValue) {
+      position.add(startPos);
+
+      if (findOnlyFirst) {
+        break;
+      }
+    }
+  } while (subListLength <= endList);
+  return position;
+}
