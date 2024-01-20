@@ -12,6 +12,10 @@ abstract interface class _RamdomAccessStreamInterface {
   void writeSync(List<int> value);
   void writeByteSync(int value);
   void flushSync();
+  List<int> findAllSublistInitialPosition(List<int> subListToFind,
+      {bool findOnyFirst = false, int start = 0, int end = 0});
+ int findFirstSublistInitialPosition(List<int> subListToFind,
+      {int start = 0, int end = 0});     
 }
 
 interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
@@ -59,5 +63,18 @@ interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   @override
   bool contains(List<int> value) {
     return _listOfBytes.findFirstPositionWhere(value) != -1;
+  }
+
+  @override
+  List<int> findAllSublistInitialPosition(List<int> subListToFind,
+      {bool findOnyFirst = false, int start = 0, int end = 0}) {
+    return _listOfBytes.findAllPositionWhere(subListToFind,
+        findOnlyFirst: findOnyFirst, start: start, end: end);
+  }
+  
+  @override
+  int findFirstSublistInitialPosition(List<int> subListToFind, {int start = 0, int end = 0}) {
+   return _listOfBytes.findFirstPositionWhere(subListToFind,
+        start: start, end: end);
   }
 }
