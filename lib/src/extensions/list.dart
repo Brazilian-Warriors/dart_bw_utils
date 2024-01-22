@@ -23,7 +23,7 @@ extension BWExListInt on List<int> {
   }
 
   ByteData get _byteData {
-    return ByteData.sublistView(Uint8List.fromList(this));
+    return ByteData.sublistView(_toUint8List(this));
   }
 
   List<int> findAllSublistPositionWhere(
@@ -32,8 +32,8 @@ extension BWExListInt on List<int> {
     int start = 0,
     int end = 0,
   }) {
-    return _findPositionInListWhere(
-        this, valueToFind, findOnlyFirst, start, end);
+    return _findPositionInListWhere(_toUint8List(this),
+        _toUint8List(valueToFind), findOnlyFirst, start, end);
   }
 
   int findFirstSublistPositionWhere(
@@ -41,7 +41,8 @@ extension BWExListInt on List<int> {
     int start = 0,
     int end = 0,
   }) {
-    final value = _findPositionInListWhere(this, valueToFind, true, start, end);
+    final value = _findPositionInListWhere(
+        _toUint8List(this), _toUint8List(valueToFind), true, start, end);
 
     return value.isEmpty ? -1 : value.first;
   }
@@ -51,18 +52,22 @@ extension BWExListInt on List<int> {
     int start = 0,
     int end = 0,
   }) {
-    final value = _findPositionInListWhere(this, subList, true, start, end);
+    final value = _findPositionInListWhere(
+        _toUint8List(this), _toUint8List(subList), true, start, end);
 
     return value.isNotEmpty;
   }
 }
 
+Uint8List _toUint8List(List<int> value) =>
+    (value is Uint8List) ? value : Uint8List.fromList(value);
+
 List<int> _findPositionInListWhere(
-  List<int> originalList,
-  List<int> valueToFind, [
+  Uint8List originalList,
+  Uint8List valueToFind, [
   bool findOnlyFirst = false,
   int start = 0,
-  int endList = 0,
+  int end = 0,
 ]) {
   if ((originalList.isEmpty) || (originalList.length < valueToFind.length)) {
     return [];
@@ -77,32 +82,34 @@ List<int> _findPositionInListWhere(
     start = 0;
   }
 
-  int subListLength = valueToFind.length + start;
+  int subListEnd = valueToFind.length + start;
 
-  if ((endList == 0) || (endList > originalList.length)) {
-    endList = originalList.length;
+  if ((end == 0) || (end > originalList.length)) {
+    end = originalList.length;
   }
 
-  if (((endList - start) < subListLength) || (endList <= start)) {
-    endList = subListLength;
+  if (((end - start) < subListEnd) || (end <= start)) {
+    end = subListEnd;
   }
 
-  if (endList < originalList.length) {
-    endList++;
+  if (end < originalList.length) {
+    end++;
   }
 
   List<int> position = [];
+  Uint8List subList = Uint8List(valueToFind.length);
   bool equalValue = false;
+  int startPos = 0;
 
   do {
-    final subList = originalList.sublist(start, subListLength);
-    equalValue = false;
-    final int startPos = start;
+    startPos = start;
+    subList = originalList.sublist(start, subListEnd);
+
     for (var i = 0; i < subList.length; i++) {
       equalValue = subList[i] == valueToFind[i];
 
       start++;
-      subListLength++;
+      subListEnd++;
 
       if (equalValue == false) {
         break;
@@ -116,6 +123,6 @@ List<int> _findPositionInListWhere(
         break;
       }
     }
-  } while (subListLength <= endList);
+  } while (subListEnd <= end);
   return position;
 }
