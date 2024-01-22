@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bw_utils/bw_utils.dart';
 
 interface class RamdomAccessStream extends _RamdomAccessStream {
@@ -14,33 +16,43 @@ abstract interface class _RamdomAccessStreamInterface {
   void flushSync();
   List<int> findAllSublistInitialPosition(List<int> subListToFind,
       {bool findOnyFirst = false, int start = 0, int end = 0});
- int findFirstSublistInitialPosition(List<int> subListToFind,
-      {int start = 0, int end = 0});     
+  int findFirstSublistInitialPosition(List<int> subListToFind,
+      {int start = 0, int end = 0});
 }
 
 interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   int _offset = 0;
   // ignore: prefer_final_fields
-  List<int> _listOfBytes = [];
+  Uint8List _listOfBytes;
 
-  _RamdomAccessStream({required List<int> bytes}) : _listOfBytes = bytes;
+  _RamdomAccessStream({required List<int> bytes})
+      : _listOfBytes = (bytes is Uint8List) ? bytes : Uint8List.fromList(bytes);
 
   @override
   int getPositionSync() => _offset;
 
   @override
-  void setPositionSync([int position = 0]) =>
-      position < 0 ? _offset = 0 : _offset = position;
+  void setPositionSync([int position = 0]) {
+    if (position < 0) {
+      position = 0;
+    }
+
+    if (position > _listOfBytes.length) {
+      position = _listOfBytes.length;
+    }
+
+    _offset = position;
+  }
 
   @override
   List<int> readSync([int lentgth = 0]) {
     if (lentgth == 0) lentgth = _listOfBytes.length;
 
     if (lentgth + _offset > _listOfBytes.length) {
-      lentgth = _listOfBytes.length;
+      lentgth = _listOfBytes.length - _offset;
     }
 
-    final value = _listOfBytes.skip(_offset).take(lentgth).toList();
+    final Uint8List value = _listOfBytes.sublist(_offset, _offset + lentgth);
     _offset += lentgth;
     return value;
   }
@@ -71,10 +83,11 @@ interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
     return _listOfBytes.findAllPositionWhere(subListToFind,
         findOnlyFirst: findOnyFirst, start: start, end: end);
   }
-  
+
   @override
-  int findFirstSublistInitialPosition(List<int> subListToFind, {int start = 0, int end = 0}) {
-   return _listOfBytes.findFirstPositionWhere(subListToFind,
+  int findFirstSublistInitialPosition(List<int> subListToFind,
+      {int start = 0, int end = 0}) {
+    return _listOfBytes.findFirstPositionWhere(subListToFind,
         start: start, end: end);
   }
 }
