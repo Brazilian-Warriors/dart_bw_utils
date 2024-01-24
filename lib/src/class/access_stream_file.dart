@@ -9,14 +9,14 @@ interface class RamdomAccessStream extends _RamdomAccessStream {
 abstract interface class _RamdomAccessStreamInterface {
   int getPositionSync();
   void setPositionSync([int position = 0]);
-  bool contains(List<int> value);
-  List<int> readSync(int lentgth);
-  void writeSync(List<int> value);
+  bool contains(Uint8List value);
+  Uint8List readSync(int lentgth);
+  void writeSync(Uint8List value);
   void writeByteSync(int value);
   void flushSync();
-  List<int> findAllSublistInitialPosition(List<int> subListToFind,
+  List<int> findAllSublistInitialPosition(Uint8List subListToFind,
       {bool findOnyFirst = false, int start = 0, int end = 0});
-  int findFirstSublistInitialPosition(List<int> subListToFind,
+  int findFirstSublistInitialPosition(Uint8List subListToFind,
       {int start = 0, int end = 0});
 }
 
@@ -25,8 +25,8 @@ interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   // ignore: prefer_final_fields
   Uint8List _listOfBytes;
 
-  _RamdomAccessStream({required List<int> bytes})
-      : _listOfBytes = (bytes is Uint8List) ? bytes : Uint8List.fromList(bytes);
+  _RamdomAccessStream({required Uint8List bytes})
+      : _listOfBytes = bytes;
 
   @override
   int getPositionSync() => _offset;
@@ -45,7 +45,7 @@ interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   }
 
   @override
-  List<int> readSync([int lentgth = 0]) {
+  Uint8List readSync([int lentgth = 0]) {
     if (lentgth == 0) lentgth = _listOfBytes.length;
 
     if (lentgth + _offset > _listOfBytes.length) {
@@ -58,7 +58,7 @@ interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   }
 
   @override
-  void writeSync(List<int> value) {
+  void writeSync(Uint8List value) {
     _listOfBytes.addAll(value);
   }
 
@@ -78,14 +78,14 @@ interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   }
 
   @override
-  List<int> findAllSublistInitialPosition(List<int> subListToFind,
+  List<int> findAllSublistInitialPosition(Uint8List subListToFind,
       {bool findOnyFirst = false, int start = 0, int end = 0}) {
     return _listOfBytes.findAllPositionWhere(subListToFind,
         findOnlyFirst: findOnyFirst, start: start, end: end);
   }
 
   @override
-  int findFirstSublistInitialPosition(List<int> subListToFind,
+  int findFirstSublistInitialPosition(Uint8List subListToFind,
       {int start = 0, int end = 0}) {
     return _listOfBytes.findFirstPositionWhere(subListToFind,
         start: start, end: end);
