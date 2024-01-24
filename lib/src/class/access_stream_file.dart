@@ -22,8 +22,7 @@ abstract interface class _RamdomAccessStreamInterface {
 }
 
 class _RamdomAccessStream implements _RamdomAccessStreamInterface {
-  int _offset = 0;
-  List<int> _tempList = [];
+  int _offset = 0;  
   Uint8List _listOfBytes;
 
   _RamdomAccessStream({required Uint8List bytes}) : _listOfBytes = bytes;
@@ -58,16 +57,6 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   }
 
   @override
-  void writeSync(Uint8List value) {
-    _tempList = _listOfBytes;
-    _tempList.addAll(value);
-
-    _listOfBytes = _toUint8List(_tempList);
-
-    _tempList.clear();
-  }
-
-  @override
   void flushSync() {
     _listOfBytes = Uint8List(0);
     _offset = 0;
@@ -93,22 +82,40 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   }
 
   @override
-  void replace(int start, Uint8List value) {
-    _tempList = _listOfBytes;
-    _tempList.replaceRange(start, start + value.length, value);
-    _listOfBytes = _toUint8List(_tempList);
-    _tempList.clear();
-  }
+  void replace(int start, Uint8List value) =>
+      _changeListOfBytes(value, start, ChangeList.replace);
 
-  Uint8List _toUint8List(List<int> list) {
-    return Uint8List.fromList(list);
-  }
-  
   @override
-  void insert(int start, Uint8List value) {
-     _tempList = _listOfBytes;
-    _tempList.insertAll(start, value);
-    _listOfBytes = _toUint8List(_tempList);
-    _tempList.clear();
+  void insert(int start, Uint8List value) =>
+      _changeListOfBytes(value, start, ChangeList.insert);
+
+  @override
+  void writeSync(Uint8List value) =>
+      _changeListOfBytes(value, 0, ChangeList.add);
+
+  void _changeListOfBytes(Uint8List value, int start, ChangeList type) {
+   
+    List<int> tempList = _listOfBytes;
+
+    switch (type) {
+      case ChangeList.insert:
+        tempList.insertAll(start, value);
+        break;
+      case ChangeList.replace:
+        tempList.replaceRange(start, start + value.length, value);
+        break;
+      case ChangeList.add:
+        tempList.addAll(value);
+        break;
+    }
+
+    _listOfBytes = Uint8List.fromList(tempList);
+    tempList.clear();
   }
+}
+
+enum ChangeList {
+  insert,
+  replace,
+  add,
 }
