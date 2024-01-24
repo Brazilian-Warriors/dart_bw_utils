@@ -74,20 +74,20 @@ interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
 
   @override
   bool contains(List<int> value) {
-    return _listOfBytes.findFirstPositionWhere(value) != -1;
+    return _listOfBytes.findFirstSublistPositionWhere(value) != -1;
   }
 
   @override
   List<int> findAllSublistInitialPosition(Uint8List subListToFind,
       {bool findOnyFirst = false, int start = 0, int end = 0}) {
-    return _listOfBytes.findAllPositionWhere(subListToFind,
+    return _listOfBytes.findAllSublistPositionWhere(subListToFind,
         findOnlyFirst: findOnyFirst, start: start, end: end);
   }
 
   @override
   int findFirstSublistInitialPosition(Uint8List subListToFind,
       {int start = 0, int end = 0}) {
-    return _listOfBytes.findFirstPositionWhere(subListToFind,
+    return _listOfBytes.findFirstSublistPositionWhere(subListToFind,
         start: start, end: end);
   }
 }
