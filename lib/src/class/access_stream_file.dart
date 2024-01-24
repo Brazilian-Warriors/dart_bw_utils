@@ -13,6 +13,7 @@ abstract interface class _RamdomAccessStreamInterface {
   Uint8List readSync(int lentgth);
   void writeSync(Uint8List value);
   void replace(int start, Uint8List value);
+  void insert(int start, Uint8List value);
   void flushSync();
   List<int> findAllSublistInitialPosition(Uint8List subListToFind,
       {bool findOnyFirst = false, int start = 0, int end = 0});
@@ -91,14 +92,22 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
         start: start, end: end);
   }
 
-  Uint8List _toUint8List(List<int> list) {
-    return Uint8List.fromList(list);
-  }
-
   @override
   void replace(int start, Uint8List value) {
     _tempList = _listOfBytes;
     _tempList.replaceRange(start, start + value.length, value);
+    _listOfBytes = _toUint8List(_tempList);
+    _tempList.clear();
+  }
+
+  Uint8List _toUint8List(List<int> list) {
+    return Uint8List.fromList(list);
+  }
+  
+  @override
+  void insert(int start, Uint8List value) {
+     _tempList = _listOfBytes;
+    _tempList.insertAll(start, value);
     _listOfBytes = _toUint8List(_tempList);
     _tempList.clear();
   }
