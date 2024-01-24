@@ -3,6 +3,46 @@ import 'dart:typed_data';
 
 import 'package:bw_utils/bw_utils.dart';
 
+extension SortBy<T> on List<T> {
+  /// ```dart
+  ///
+  /// // declaration List of Person
+  ///  final List<Person> persons = [
+  ///    Person(name: 'John Doe', age: 32),
+  ///    Person(name: 'Mary Jane', age: 45)
+  ///    ];
+  ///
+  /// // sort persons by name
+  ///  persons.sortBy((person) => person.name);
+  ///
+  /// // sort persons by age descending.
+  ///  persons.sortBy((person) => person.age, asc: false);
+  ///
+  /// // simple list
+  ///  final List<int> numbers = [3, 7, 1, 6, 4, 9, 5, 8, 0, 2];
+  ///
+  ///  numbers.sortBy((value) => value);
+  ///
+  ///  print(numbers);
+  ///
+  /// // sort descending
+  ///  numbers.sortBy((value) => value, asc: false);
+  ///
+  ///  print(numbers);
+  ///
+  /// ```
+  List<T> sortBy(Comparable Function(T value) compare, {bool asc = true}) {
+    sort((a, b) {
+      final aValue = compare(a);
+      final bValue = compare(b);
+      return asc
+          ? Comparable.compare(aValue, bValue)
+          : Comparable.compare(bValue, aValue);
+    });
+    return this;
+  }
+}
+
 extension BWExListInt on List<int> {
   static final Endian _endian = getEndian;
   int get toInt8 => _byteData.getInt8(0);
@@ -23,7 +63,7 @@ extension BWExListInt on List<int> {
   }
 
   ByteData get _byteData {
-    return ByteData.sublistView(_toUint8List(this));
+    return ByteData.sublistView(Uint8List.fromList(this));
   }
 
   List<int> findAllSublistPositionWhere(
@@ -32,8 +72,8 @@ extension BWExListInt on List<int> {
     int start = 0,
     int end = 0,
   }) {
-    return _findPositionInListWhere(_toUint8List(this),
-        _toUint8List(valueToFind), findOnlyFirst, start, end);
+    return _findPositionInListWhere(
+        this, valueToFind, findOnlyFirst, start, end);
   }
 
   int findFirstSublistPositionWhere(
@@ -41,9 +81,7 @@ extension BWExListInt on List<int> {
     int start = 0,
     int end = 0,
   }) {
-    final value = _findPositionInListWhere(
-        _toUint8List(this), _toUint8List(valueToFind), true, start, end);
-
+    final value = _findPositionInListWhere(this, valueToFind, true, start, end);
     return value.isEmpty ? -1 : value.first;
   }
 
@@ -52,19 +90,15 @@ extension BWExListInt on List<int> {
     int start = 0,
     int end = 0,
   }) {
-    final value = _findPositionInListWhere(
-        _toUint8List(this), _toUint8List(subList), true, start, end);
+    final value = _findPositionInListWhere(this, subList, true, start, end);
 
     return value.isNotEmpty;
   }
 }
 
-Uint8List _toUint8List(List<int> value) =>
-    (value is Uint8List) ? value : Uint8List.fromList(value);
-
 List<int> _findPositionInListWhere(
-  Uint8List originalList,
-  Uint8List valueToFind, [
+  List<int> originalList,
+  List<int> valueToFind, [
   bool findOnlyFirst = false,
   int start = 0,
   int end = 0,
@@ -97,7 +131,7 @@ List<int> _findPositionInListWhere(
   }
 
   List<int> position = [];
-  Uint8List subList = Uint8List(valueToFind.length);
+  List<int> subList = List.filled(valueToFind.length, 0);
   bool equalValue = false;
   int startPos = 0;
 
