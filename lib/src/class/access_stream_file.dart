@@ -12,17 +12,17 @@ abstract interface class _RamdomAccessStreamInterface {
   bool contains(Uint8List value);
   Uint8List readSync(int lentgth);
   void writeSync(Uint8List value);
-  void writeByteSync(int value);
+  void replace(int start, Uint8List value);
   void flushSync();
   List<int> findAllSublistInitialPosition(Uint8List subListToFind,
       {bool findOnyFirst = false, int start = 0, int end = 0});
   int findFirstSublistInitialPosition(Uint8List subListToFind,
-      {int start = 0, int end = 0});  
+      {int start = 0, int end = 0});
 }
 
 class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   int _offset = 0;
-  // ignore: prefer_final_fields
+  List<int> _tempList = [];
   Uint8List _listOfBytes;
 
   _RamdomAccessStream({required Uint8List bytes}) : _listOfBytes = bytes;
@@ -58,17 +58,18 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
 
   @override
   void writeSync(Uint8List value) {
-    _listOfBytes.addAll(value);
+    _tempList = _listOfBytes;
+    _tempList.addAll(value);
+
+    _listOfBytes = _toUint8List(_tempList);
+
+    _tempList.clear();
   }
 
   @override
   void flushSync() {
-    _listOfBytes.clear();
-  }
-
-  @override
-  void writeByteSync(int value) {
-    _listOfBytes.add(value);
+    _listOfBytes = Uint8List(0);
+    _offset = 0;
   }
 
   @override
@@ -88,5 +89,17 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
       {int start = 0, int end = 0}) {
     return _listOfBytes.findFirstSublistPositionWhere(subListToFind,
         start: start, end: end);
+  }
+
+  Uint8List _toUint8List(List<int> list) {
+    return Uint8List.fromList(list);
+  }
+
+  @override
+  void replace(int start, Uint8List value) {
+    _tempList = _listOfBytes;
+    _tempList.replaceRange(start, start + value.length, value);
+    _listOfBytes = _toUint8List(_tempList);
+    _tempList.clear();
   }
 }
