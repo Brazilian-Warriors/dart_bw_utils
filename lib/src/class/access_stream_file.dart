@@ -7,6 +7,7 @@ class RamdomAccessStreamFile extends _RamdomAccessStream {
 }
 
 abstract interface class _RamdomAccessStreamInterface {
+  int get length;
   int getPositionSync();
   void setPositionSync([int position = 0]);
   bool contains(Uint8List value);
@@ -29,6 +30,9 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
 
   @override
   int getPositionSync() => _offset;
+
+  @override
+  int get length => _listOfBytes.length;
 
   @override
   void setPositionSync([int position = 0]) {
