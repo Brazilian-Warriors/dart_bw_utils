@@ -3,42 +3,42 @@ import 'dart:typed_data';
 import 'package:bw_utils/bw_utils.dart';
 
 extension BWExInt on int {
-  static ByteData valueOf64Bit = ByteData(8);
-  static ByteData valueOf32Bit = ByteData(4);
-  static ByteData valueOf16Bit = ByteData(2);
-  static ByteData valueOf8Bit = ByteData(1);
+  static final ByteData _valueOf64Bit = ByteData(8);
+  static final ByteData _valueOf32Bit = ByteData(4);
+  static final ByteData _valueOf16Bit = ByteData(2);
+  static final ByteData _valueOf8Bit = ByteData(1);
   static final Endian _endian = getEndian;
 
   List<int> toUint8List() {
-    return (valueOf8Bit..setUint8(0, this)).buffer.asUint8List();
+    return (_valueOf8Bit..setUint8(0, this)).buffer.asUint8List();
   }
 
   List<int> toInt8List() {
-    return (valueOf8Bit..setInt8(0, this)).buffer.asInt8List();
+    return (_valueOf8Bit..setInt8(0, this)).buffer.asInt8List();
   }
 
   List<int> toUint16List([Endian? endian]) {
-    return (valueOf16Bit..setUint16(0, this, endian ?? _endian)).buffer.asUint8List();
+    return (_valueOf16Bit..setUint16(0, this, endian ?? _endian)).buffer.asUint8List();
   }
 
   List<int> toInt16List([Endian? endian]) {
-    return (valueOf16Bit..setInt16(0, this, endian ?? _endian)).buffer.asInt8List();
+    return (_valueOf16Bit..setInt16(0, this, endian ?? _endian)).buffer.asInt8List();
   }
 
   List<int> toUint32List([Endian? endian]) {
-    return (valueOf32Bit..setUint32(0, this, endian ?? _endian)).buffer.asUint8List();
+    return (_valueOf32Bit..setUint32(0, this, endian ?? _endian)).buffer.asUint8List();
   }
 
   List<int> toInt32List([Endian? endian]) {
-    return (valueOf32Bit..setInt32(0, this, endian ?? _endian)).buffer.asInt8List();
+    return (_valueOf32Bit..setInt32(0, this, endian ?? _endian)).buffer.asInt8List();
   }
 
   List<int> toUint64List([Endian? endian]) {
-    return (valueOf64Bit..setUint64(0, this, endian ?? _endian)).buffer.asUint8List();
+    return (_valueOf64Bit..setUint64(0, this, endian ?? _endian)).buffer.asUint8List();
   }
 
   List<int> toInt64List([Endian? endian]) {
-    return (valueOf32Bit..setInt64(0, this, endian ?? _endian)).buffer.asInt8List();
+    return (_valueOf32Bit..setInt64(0, this, endian ?? _endian)).buffer.asInt8List();
   }
 
   List<int> toInt32LE() {

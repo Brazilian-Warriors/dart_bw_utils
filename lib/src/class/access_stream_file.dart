@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:bw_utils/bw_utils.dart';
 
-interface class RamdomAccessStream extends _RamdomAccessStream {
-  RamdomAccessStream({required super.bytes});
+class RamdomAccessStreamFile extends _RamdomAccessStream {
+  RamdomAccessStreamFile({required super.bytes});
 }
 
 abstract interface class _RamdomAccessStreamInterface {
@@ -17,16 +17,15 @@ abstract interface class _RamdomAccessStreamInterface {
   List<int> findAllSublistInitialPosition(Uint8List subListToFind,
       {bool findOnyFirst = false, int start = 0, int end = 0});
   int findFirstSublistInitialPosition(Uint8List subListToFind,
-      {int start = 0, int end = 0});
+      {int start = 0, int end = 0});  
 }
 
-interface class _RamdomAccessStream implements _RamdomAccessStreamInterface {
+class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   int _offset = 0;
   // ignore: prefer_final_fields
   Uint8List _listOfBytes;
 
-  _RamdomAccessStream({required Uint8List bytes})
-      : _listOfBytes = bytes;
+  _RamdomAccessStream({required Uint8List bytes}) : _listOfBytes = bytes;
 
   @override
   int getPositionSync() => _offset;
