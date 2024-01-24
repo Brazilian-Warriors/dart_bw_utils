@@ -22,7 +22,7 @@ abstract interface class _RamdomAccessStreamInterface {
 }
 
 class _RamdomAccessStream implements _RamdomAccessStreamInterface {
-  int _offset = 0;  
+  int _offset = 0;
   Uint8List _listOfBytes;
 
   _RamdomAccessStream({required Uint8List bytes}) : _listOfBytes = bytes;
@@ -94,8 +94,8 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
       _changeListOfBytes(value, 0, ChangeList.add);
 
   void _changeListOfBytes(Uint8List value, int start, ChangeList type) {
-   
-    List<int> tempList = _listOfBytes;
+    List<int> tempList = [];
+    tempList.addAll(_listOfBytes);
 
     switch (type) {
       case ChangeList.insert:
