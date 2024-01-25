@@ -98,23 +98,26 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
       _changeListOfBytes(value, 0, ChangeList.add);
 
   void _changeListOfBytes(Uint8List value, int start, ChangeList type) {
-    List<int> tempList = [];
-    tempList.addAll(_listOfBytes);
-
     switch (type) {
       case ChangeList.insert:
-        tempList.insertAll(start, value);
+        var byteData = BytesBuilder();
+        byteData.add(_listOfBytes.sublist(0, start));
+        byteData.add(value);
+        byteData.add(_listOfBytes.sublist(start));
+
+        _listOfBytes = byteData.takeBytes();
+
         break;
       case ChangeList.replace:
-        tempList.replaceRange(start, start + value.length, value);
+        _listOfBytes.setRange(start, start + value.length, value);
         break;
       case ChangeList.add:
-        tempList.addAll(value);
+        _listOfBytes = (BytesBuilder()
+              ..add(_listOfBytes)
+              ..add(value))
+            .takeBytes();
         break;
     }
-
-    _listOfBytes = Uint8List.fromList(tempList);
-    tempList.clear();
   }
 }
 
