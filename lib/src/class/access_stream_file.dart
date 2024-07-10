@@ -2,16 +2,15 @@ import 'dart:typed_data';
 
 import 'package:bw_utils/bw_utils.dart';
 
-class RamdomAccessStreamFile extends _RamdomAccessStream {
-  RamdomAccessStreamFile({required super.bytes});
-}
+abstract interface class RandomAccessStreamFile {
+  factory RandomAccessStreamFile() => _RandomAccessStreamFile(bytes: Uint8List(0));
+  factory RandomAccessStreamFile.from({required Uint8List bytes}) => _RandomAccessStreamFile(bytes: bytes);
 
-abstract interface class _RamdomAccessStreamInterface {
   int get length;
   int getPositionSync();
   void setPositionSync([int position = 0]);
+  Uint8List readSync([int length = 0]);
   bool contains(Uint8List value);
-  Uint8List readSync(int lentgth);
   void writeSync(Uint8List value);
   void replace(int start, Uint8List value);
   void insert(int start, Uint8List value);
@@ -21,33 +20,33 @@ abstract interface class _RamdomAccessStreamInterface {
   int findFirstPos(Uint8List subListToFind,
       {int start = 0, int end = 0});
 
-  int readInt64([Endian? endian]);
+  int get readInt8;
 
-  int readUint64([Endian? endian]);
-
-  int readInt32([Endian? endian]);
-
-  int readUint32([Endian? endian]);
+  int get readUint8;
 
   int readInt16([Endian? endian]);
 
   int readUint16([Endian? endian]);
 
-  int get readInt8;
+  int readInt32([Endian? endian]);
 
-  int get readUint8;
+  int readUint32([Endian? endian]);
+
+  int readInt64([Endian? endian]);
+
+  int readUint64([Endian? endian]);
 
   double readFloat32([Endian? endian]);
 
   double readFloat64([Endian? endian]);
 }
 
-class _RamdomAccessStream implements _RamdomAccessStreamInterface {
+class _RandomAccessStreamFile implements RandomAccessStreamFile {
   int _offset = 0;
   Uint8List _listOfBytes;
   static final Endian _endian = getEndian;
 
-  _RamdomAccessStream({required Uint8List bytes}) : _listOfBytes = bytes;
+  _RandomAccessStreamFile({required Uint8List bytes}) : _listOfBytes = bytes;
 
   @override
   int getPositionSync() => _offset;
@@ -69,15 +68,15 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
   }
 
   @override
-  Uint8List readSync([int lentgth = 0]) {
-    if (lentgth == 0) lentgth = _listOfBytes.length;
+  Uint8List readSync([int length = 0]) {
+    if (length == 0) length = _listOfBytes.length;
 
-    if (lentgth + _offset > _listOfBytes.length) {
-      lentgth = _listOfBytes.length - _offset;
+    if (length + _offset > _listOfBytes.length) {
+      length = _listOfBytes.length - _offset;
     }
 
-    final Uint8List value = _listOfBytes.sublist(_offset, _offset + lentgth);
-    _offset += lentgth;
+    final Uint8List value = _listOfBytes.sublist(_offset, _offset + length);
+    _offset += length;
     return value;
   }
 
