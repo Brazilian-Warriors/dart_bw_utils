@@ -16,9 +16,9 @@ abstract interface class _RamdomAccessStreamInterface {
   void replace(int start, Uint8List value);
   void insert(int start, Uint8List value);
   void flushSync();
-  List<int> findAllSublistInitialPosition(Uint8List subListToFind,
-      {bool findOnyFirst = false, int start = 0, int end = 0});
-  int findFirstSublistInitialPosition(Uint8List subListToFind,
+  List<int> findAllPos(Uint8List subListToFind,
+      {bool findOnlyFirst = false, int start = 0, int end = 0});
+  int findFirstPos(Uint8List subListToFind,
       {int start = 0, int end = 0});
 
   int readInt64([Endian? endian]);
@@ -89,20 +89,20 @@ class _RamdomAccessStream implements _RamdomAccessStreamInterface {
 
   @override
   bool contains(List<int> value) {
-    return _listOfBytes.findFirstSublistPositionWhere(value) != -1;
+    return _listOfBytes.findFirstPos(value) != -1;
   }
 
   @override
-  List<int> findAllSublistInitialPosition(Uint8List subListToFind,
-      {bool findOnyFirst = false, int start = 0, int end = 0}) {
-    return _listOfBytes.findAllSublistPositionWhere(subListToFind,
-        findOnlyFirst: findOnyFirst, start: start, end: end);
+  List<int> findAllPos(Uint8List subListToFind,
+      {bool findOnlyFirst = false, int start = 0, int end = 0}) {
+    return _listOfBytes.findAllPos(subListToFind,
+        findOnlyFirst: findOnlyFirst, start: start, end: end);
   }
 
   @override
-  int findFirstSublistInitialPosition(Uint8List subListToFind,
+  int findFirstPos(Uint8List subListToFind,
       {int start = 0, int end = 0}) {
-    return _listOfBytes.findFirstSublistPositionWhere(subListToFind,
+    return _listOfBytes.findFirstPos(subListToFind,
         start: start, end: end);
   }
 

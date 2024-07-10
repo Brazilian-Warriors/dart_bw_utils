@@ -9,35 +9,35 @@ extension BWExInt on int {
   static final ByteData _valueOf8Bit = ByteData(1);
   static final Endian _endian = getEndian;
 
-  List<int> toUint8List() {
+  Uint8List toUint8List() {
     return (_valueOf8Bit..setUint8(0, this)).buffer.asUint8List();
   }
 
-  List<int> toInt8List() {
+  Int8List toInt8List() {
     return (_valueOf8Bit..setInt8(0, this)).buffer.asInt8List();
   }
 
-  List<int> toUint16List([Endian? endian]) {
+  Uint8List toUint16List([Endian? endian]) {
     return (_valueOf16Bit..setUint16(0, this, endian ?? _endian)).buffer.asUint8List();
   }
 
-  List<int> toInt16List([Endian? endian]) {
+  Int8List toInt16List([Endian? endian]) {
     return (_valueOf16Bit..setInt16(0, this, endian ?? _endian)).buffer.asInt8List();
   }
 
-  List<int> toUint32List([Endian? endian]) {
+  Uint8List toUint32List([Endian? endian]) {
     return (_valueOf32Bit..setUint32(0, this, endian ?? _endian)).buffer.asUint8List();
   }
 
-  List<int> toInt32List([Endian? endian]) {
+  Int8List toInt32List([Endian? endian]) {
     return (_valueOf32Bit..setInt32(0, this, endian ?? _endian)).buffer.asInt8List();
   }
 
-  List<int> toUint64List([Endian? endian]) {
+  Uint8List toUint64List([Endian? endian]) {
     return (_valueOf64Bit..setUint64(0, this, endian ?? _endian)).buffer.asUint8List();
   }
 
-  List<int> toInt64List([Endian? endian]) {
+  Int8List toInt64List([Endian? endian]) {
     return (_valueOf32Bit..setInt64(0, this, endian ?? _endian)).buffer.asInt8List();
   }
 

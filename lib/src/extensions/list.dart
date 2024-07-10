@@ -66,22 +66,22 @@ extension BWExListInt on List<int> {
     return ByteData.sublistView(Uint8List.fromList(this));
   }
 
-  List<int> findAllSublistPositionWhere(
+  List<int> findAllPos(
     List<int> valueToFind, {
     bool findOnlyFirst = false,
     int start = 0,
     int end = 0,
   }) {
-    return _findPositionInListWhere(
+    return _findPositionInList(
         this, valueToFind, findOnlyFirst, start, end);
   }
 
-  int findFirstSublistPositionWhere(
+  int findFirstPos(
     List<int> valueToFind, {
     int start = 0,
     int end = 0,
   }) {
-    final value = _findPositionInListWhere(this, valueToFind, true, start, end);
+    final value = _findPositionInList(this, valueToFind, true, start, end);
     return value.isEmpty ? -1 : value.first;
   }
 
@@ -90,13 +90,13 @@ extension BWExListInt on List<int> {
     int start = 0,
     int end = 0,
   }) {
-    final value = _findPositionInListWhere(this, subList, true, start, end);
+    final value = _findPositionInList(this, subList, true, start, end);
 
     return value.isNotEmpty;
   }
 }
 
-List<int> _findPositionInListWhere(
+List<int> _findPositionInList(
   List<int> originalList,
   List<int> valueToFind, [
   bool findOnlyFirst = false,

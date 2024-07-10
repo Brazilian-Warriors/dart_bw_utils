@@ -42,7 +42,7 @@ extension BWReadToNumber on RandomAccessFile {
   }
 
   double readFloat64([Endian? endian]) {
-    return _readByteData(4).getFloat64(0, endian ?? _endian);
+    return _readByteData(8).getFloat64(0, endian ?? _endian);
   }
 
   ByteData _readByteData(int lengthOfBytes) {
