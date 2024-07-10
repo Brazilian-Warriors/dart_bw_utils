@@ -7,6 +7,8 @@ abstract interface class RandomAccessStreamFile {
   factory RandomAccessStreamFile.from({required Uint8List bytes}) => _RandomAccessStreamFile(bytes: bytes);
 
   int get length;
+  bool get isEmpty;
+  bool get isNotEmpty;
   int getPositionSync();
   void setPositionSync([int position = 0]);
   Uint8List readSync([int length = 0]);
@@ -53,6 +55,12 @@ class _RandomAccessStreamFile implements RandomAccessStreamFile {
 
   @override
   int get length => _listOfBytes.length;
+
+  @override
+  bool get isEmpty => _listOfBytes.isEmpty;
+
+  @override
+  bool get isNotEmpty => _listOfBytes.isNotEmpty;
 
   @override
   void setPositionSync([int position = 0]) {
@@ -130,6 +138,7 @@ class _RandomAccessStreamFile implements RandomAccessStreamFile {
         break;
       case ChangeList.replace:
         _listOfBytes.setRange(start, start + value.length, value);
+
         break;
       case ChangeList.add:
         _listOfBytes = (BytesBuilder()
@@ -193,6 +202,7 @@ class _RandomAccessStreamFile implements RandomAccessStreamFile {
   ByteData _readByteData(int lengthOfBytes) {
     return readSync(lengthOfBytes).buffer.asByteData();
   }
+
 }
 
 enum ChangeList {
