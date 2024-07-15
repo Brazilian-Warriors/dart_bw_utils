@@ -19,9 +19,9 @@ abstract interface class RandomAccessStreamFile {
   void replace(int start, Uint8List value);
   void insert(int start, Uint8List value);
   void flushSync();
-  List<int> findAllPos(Uint8List subListToFind,
+  List<int> findAllPosSync(Uint8List subListToFind,
       {bool findOnlyFirst = false, int start = 0, int end = 0});
-  int findFirstPos(Uint8List subListToFind, {int start = 0, int end = 0});
+  int findFirstPosSync(Uint8List subListToFind, {int start = 0, int end = 0});
 
   int get readInt8;
 

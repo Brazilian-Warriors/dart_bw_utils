@@ -53,21 +53,19 @@ class _RandomAccessStreamFile implements RandomAccessStreamFile {
 
   @override
   bool contains(List<int> value) {
-    return _listOfBytes.containsSublist(value);
+    return _listOfBytes.containsSublistSync(value);
   }
 
   @override
-  List<int> findAllPos(Uint8List subListToFind,
+  List<int> findAllPosSync(Uint8List subListToFind,
       {bool findOnlyFirst = false, int start = 0, int end = 0}) {
-    return _listOfBytes.findAllPos(subListToFind,
+    return _listOfBytes.findAllPosSync(subListToFind,
         findOnlyFirst: findOnlyFirst, start: start, end: end);
   }
 
   @override
-  int findFirstPos(Uint8List subListToFind,
-      {int start = 0, int end = 0}) {
-    return _listOfBytes.findFirstPos(subListToFind,
-        start: start, end: end);
+  int findFirstPosSync(Uint8List subListToFind, {int start = 0, int end = 0}) {
+    return _listOfBytes.findFirstPosSync(subListToFind, start: start, end: end);
   }
 
   @override
@@ -159,7 +157,6 @@ class _RandomAccessStreamFile implements RandomAccessStreamFile {
   ByteData _readByteData(int lengthOfBytes) {
     return readSync(lengthOfBytes).buffer.asByteData();
   }
-
 }
 
 enum ChangeList {
