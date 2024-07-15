@@ -53,7 +53,7 @@ class _RandomAccessStreamFile implements RandomAccessStreamFile {
 
   @override
   bool contains(List<int> value) {
-    return _listOfBytes.findFirstPos(value) != -1;
+    return _listOfBytes.containsSublist(value);
   }
 
   @override

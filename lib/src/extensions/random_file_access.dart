@@ -74,8 +74,7 @@ extension BWReadToNumber on RandomAccessFile {
       start = 0;
     }
 
-    if ((start >= lengthSync()) ||
-        ((start + valueToFind.length) > lengthSync())) {
+    if ((start >= lengthSync()) || ((start + valueToFind.length) > lengthSync())) {
       start = lengthSync() - valueToFind.length;
     }
 
